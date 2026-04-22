@@ -11,49 +11,75 @@ def save_review(folder, idx, film_title, text):
         f.write(film_title + '\n')
         f.write(text.strip())
 
-FILM_ID = '89515'
-FILM_TITLE = 'Гарри Поттер и Принц-полукровка'
-STATUS = 'good' 
-PER_PAGE = 50
-MAX_REVIEWS = 100      
+films = [
+    ('89515', 'Гарри Поттер и Принц-полукровка'),
+    ('251733', 'Аватар'),
+    ('258687', 'Интерстеллар'),
+    ('447', 'Звёздные войны: Эпизод 6 – Возвращение Джедая'),
+    ('32898', 'Достучаться до небес'),
+]
 
 headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
 }
 
-count = 0
-page = 1
+TARGET_COUNT = 1000
+good_count, bad_count = 0, 0
+good_idx, bad_idx = 0, 0
+per_page = 50
 
-while count < MAX_REVIEWS:
-    url = f"https://www.kinopoisk.ru/film/{FILM_ID}/reviews/ord/date/status/{STATUS}/perpage/{PER_PAGE}/page/{page}/"
-    print(f"Страница {page} ({STATUS})...")
-
-    response = requests.get(url, headers=headers)
-    if response.status_code != 200:
-        print(f"Ошибка загрузки страницы {page}. Код: {response.status_code}")
+for film_id, film_title in films:
+    if good_count >= TARGET_COUNT and bad_count >= TARGET_COUNT:
         break
 
-    soup = BeautifulSoup(response.text, 'html.parser')
-    reviews = soup.find_all('div', class_='response')
+    for status in ['good', 'bad']:
+        if (status == 'good' and good_count >= TARGET_COUNT) or \
+           (status == 'bad' and bad_count >= TARGET_COUNT):
+            continue
 
-    if not reviews:
-        print("Рецензии закончились.")
-        break
+        page = 1
+        while True:
+            if (status == 'good' and good_count >= TARGET_COUNT) or \
+               (status == 'bad' and bad_count >= TARGET_COUNT):
+                break
 
-    for review in reviews:
-        if count >= MAX_REVIEWS:
-            break
+            url = f"https://www.kinopoisk.ru/film/{film_id}/reviews/ord/date/status/{status}/perpage/{per_page}/page/{page}/"
+            print(f"Фильм: {film_title}, статус: {status}, страница: {page}")
 
-        spoiler = review.find('span', class_='spoiler_content')
-        brand_words = review.find('div', class_='brand_words')
-        text = spoiler.text if spoiler else (brand_words.text if brand_words else "")
+            response = requests.get(url, headers=headers)
+            if response.status_code != 200:
+                print(f"  Ошибка {response.status_code}")
+                break
 
-        if text:
-            save_review(STATUS, count, FILM_TITLE, text)
-            count += 1
+            soup = BeautifulSoup(response.text, 'html.parser')
+            reviews = soup.find_all('div', class_='response')
 
-    print(f"  Собрано {count} рецензий")
-    page += 1
-    time.sleep(1)
+            if not reviews:
+                print("  Рецензий больше нет")
+                break
 
-print(f"Готово! Сохранено {count} рецензий в папке dataset/{STATUS}")
+            for review in reviews:
+                if status == 'good' and good_count >= TARGET_COUNT:
+                    break
+                if status == 'bad' and bad_count >= TARGET_COUNT:
+                    break
+
+                spoiler = review.find('span', class_='spoiler_content')
+                brand_words = review.find('div', class_='brand_words')
+                text = spoiler.text if spoiler else (brand_words.text if brand_words else "")
+
+                if text:
+                    if status == 'good':
+                        save_review('good', good_idx, film_title, text)
+                        good_count += 1
+                        good_idx += 1
+                    else:
+                        save_review('bad', bad_idx, film_title, text)
+                        bad_count += 1
+                        bad_idx += 1
+
+            print(f"  Всего: +{good_count} | -{bad_count}")
+            page += 1
+            time.sleep(1)
+
+print(f"\nСбор завершён. Положительных: {good_count}, отрицательных: {bad_count}")

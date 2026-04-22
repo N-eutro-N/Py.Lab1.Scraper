@@ -1,12 +1,7 @@
 {
   "Version": 1,
   "WorkspaceRootPath": "C:\\Users\\kot\\source\\repos\\Py.Lab1.Scraper\\",
-  "Documents": [
-    {
-      "AbsoluteMoniker": "D:0:0:{BE26910F-B3B6-46DD-87EE-F118E97E0BA8}|PythonLab1\\PythonLab1.pyproj|C:\\Users\\kot\\source\\repos\\Py.Lab1.Scraper\\PythonLab1\\PythonLab1.py||{8B382828-6202-11D1-8870-0000F87579D2}",
-      "RelativeMoniker": "D:0:0:{BE26910F-B3B6-46DD-87EE-F118E97E0BA8}|PythonLab1\\PythonLab1.pyproj|solutionrelative:PythonLab1\\PythonLab1.py||{8B382828-6202-11D1-8870-0000F87579D2}"
-    }
-  ],
+  "Documents": [],
   "DocumentGroupContainers": [
     {
       "Orientation": 0,
@@ -14,7 +9,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": -1,
           "Children": [
             {
               "$type": "Bookmark",
@@ -27,19 +22,6 @@
             {
               "$type": "Bookmark",
               "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "PythonLab1.py",
-              "DocumentMoniker": "C:\\Users\\kot\\source\\repos\\Py.Lab1.Scraper\\PythonLab1\\PythonLab1.py",
-              "RelativeDocumentMoniker": "PythonLab1\\PythonLab1.py",
-              "ToolTip": "C:\\Users\\kot\\source\\repos\\Py.Lab1.Scraper\\PythonLab1\\PythonLab1.py",
-              "RelativeToolTip": "PythonLab1\\PythonLab1.py",
-              "ViewState": "AgIAAEIAAAAAAAAAAAAAAAwAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.002457|",
-              "WhenOpened": "2026-04-22T18:03:16.667Z",
-              "EditorCaption": ""
             }
           ]
         },
